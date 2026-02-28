@@ -29,22 +29,15 @@ body {
   color: var(--green);
   font-family: 'Share Tech Mono', monospace;
   overflow-x: hidden;
-  cursor: none;
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='20'><rect width='9' height='17' fill='%2300ff41'/></svg>") 2 2, crosshair;
+}
+
+a, button, .btn, .clink, nav ul a, [href] {
+  cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='20'><rect width='9' height='17' fill='%23ffb000'/></svg>") 2 2, pointer;
 }
 
 /* Custom cursor */
-#cur {
-  position: fixed;
-  width: 10px; height: 18px;
-  background: var(--green);
-  pointer-events: none;
-  z-index: 9999;
-  animation: cblink 1s step-end infinite;
-  /* NEW - replace those 2 lines with: */
-  box-shadow: 0 0 6px var(--green);
-  top: 0; left: 0;
-}
-@keyframes cblink { 0%,100%{opacity:1} 50%{opacity:0} }
+
 
 /* CRT scanlines */
 body::before {
@@ -153,7 +146,7 @@ section { position:relative; z-index:1; padding: 110px 48px 80px; }
   border:1px solid var(--green); color:var(--green);
   text-decoration:none; font-family:'Share Tech Mono',monospace;
   font-size:12px; letter-spacing:2px; text-transform:uppercase;
-  transition:all .2s; cursor:none; position:relative; overflow:hidden;
+  transition:all .2s; cursor:inherit; position:relative; overflow:hidden;
 }
 .btn::before { content:''; position:absolute; top:0;left:-100%;width:100%;height:100%;
   background:var(--green); transition:left .2s; z-index:-1; }
@@ -316,7 +309,7 @@ section { position:relative; z-index:1; padding: 110px 48px 80px; }
   display:flex; align-items:center; gap:16px;
   padding:15px 18px; border:1px solid var(--border);
   text-decoration:none; color:var(--dim); font-size:12px;
-  transition:all .2s; letter-spacing:1px; cursor:none;
+  transition:all .2s; letter-spacing:1px; cursor:inherit;
 }
 .clink:hover { border-color:var(--green); color:var(--green);
   text-shadow:0 0 8px var(--green); padding-left:26px; }
@@ -353,7 +346,6 @@ footer {
 </head>
 <body>
 
-<div id="cur"></div>
 <div class="bg-grid"></div>
 
 <!-- NAV -->
@@ -734,16 +726,6 @@ footer {
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── CURSOR ──
-const cur = document.getElementById('cur');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top  = e.clientY + 'px';
-});
-
-document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; });
-document.addEventListener('mouseenter', () => { cur.style.opacity = '1'; });
-
 // ── CLOCK ──
 const clkEl = document.getElementById('clk');
 function tick() {
@@ -794,3 +776,24 @@ setInterval(tick, 1000); tick();
 
 // ── TYPED COMMANDS ──
 const cmds = ['synthesize top.sv', 'run_sim --uvm', 'check_cdc -lint', 'impl_design 
+const cmds = ['synthesize top.sv', 'run_sim --uvm', 'check_cdc -lint', 'impl_design -timing', 'report_coverage'];
+let ci=0,ci2=0,fwd=true;
+function type(){
+  const el=document.getElementById('typed');
+  if(!el) return;
+  const cmd=cmds[ci];
+  if(fwd){ el.textContent=cmd.substring(0,ci2++); if(ci2>cmd.length){fwd=false;setTimeout(type,1100);return;} setTimeout(type,85); }
+  else{ el.textContent=cmd.substring(0,ci2--); if(ci2<0){fwd=true;ci2=0;ci=(ci+1)%cmds.length;setTimeout(type,250);return;} setTimeout(type,38); }
+}
+type();
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  });
+});
+</script>
+</body>
+</html>
