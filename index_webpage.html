@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preetham Reddy Goudelly | RTL Design Engineer</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap');
+
+:root {
+  --green: #00ff41;
+  --dim: #00b32c;
+  --dark: #003d0f;
+  --bg: #000000;
+  --panel: #010a01;
+  --border: #00ff4120;
+  --amber: #ffb000;
+  --cyan: #00ffff;
+  --soft: #88cc88;
+  --white: #e8ffe8;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--green);
+  font-family: 'Share Tech Mono', monospace;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+#cur {
+  position: fixed;
+  width: 10px; height: 18px;
+  background: var(--green);
+  pointer-events: none;
+  z-index: 9999;
+  animation: cblink 1s step-end infinite;
+  mix-blend-mode: screen;
+  transform: translate(-2px,-2px);
+}
+@keyframes cblink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* CRT scanlines */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background: repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.12) 2px,rgba(0,0,0,0.12) 4px);
+  pointer-events:none; z-index:900;
+}
+/* Vignette */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.75) 100%);
+  pointer-events:none; z-index:901;
+}
+
+/* Grid background */
+.bg-grid {
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(0,255,65,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,255,65,0.025) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:800;
+  background: rgba(0,3,0,0.94);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 48px;
+  display:flex; justify-content:space-between; align-items:center;
+  backdrop-filter: blur(6px);
+}
+.nav-logo {
+  font-family:'VT323',monospace; font-size:26px;
+  color:var(--green); letter-spacing:4px;
+  text-shadow:0 0 12px var(--green),0 0 30px rgba(0,255,65,0.3);
+}
+.nav-logo em { color:var(--amber); font-style:normal; }
+nav ul { list-style:none; display:flex; gap:28px; }
+nav ul a {
+  color:var(--dim); text-decoration:none; font-size:12px;
+  letter-spacing:2px; text-transform:uppercase; transition:all .2s;
+}
+nav ul a:hover { color:var(--green); text-shadow:0 0 8px var(--green); }
+.nav-ping { display:flex; align-items:center; gap:8px; font-size:11px; color:var(--dim); }
+.ping-dot { width:6px;height:6px;background:var(--green);border-radius:50%;
+  animation:pdot 2s ease-in-out infinite; box-shadow:0 0 6px var(--green); }
+@keyframes pdot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+
+/* ── SECTIONS ── */
+section { position:relative; z-index:1; padding: 110px 48px 80px; }
+.container { max-width:1140px; margin:0 auto; }
+
+/* Section header */
+.sh { margin-bottom:48px; }
+.sh-label { font-size:11px; color:var(--dim); letter-spacing:4px; text-transform:uppercase; margin-bottom:6px; }
+.sh-label::before { content:'// '; color:var(--amber); }
+.sh-title { font-family:'VT323',monospace; font-size:56px; color:var(--green);
+  text-shadow:0 0 16px rgba(0,255,65,0.35); line-height:1; }
+.sh-line { height:1px; background:linear-gradient(to right, var(--green), transparent); margin-top:14px; }
+
+/* Panel box */
+.panel {
+  border:1px solid var(--border);
+  background:var(--panel);
+  position:relative;
+}
+.panel[data-lbl]::before {
+  content:attr(data-lbl);
+  position:absolute; top:-10px; left:16px;
+  background:var(--bg); padding:0 8px;
+  font-size:10px; color:var(--amber); letter-spacing:2px;
+}
+
+/* ── HOME ── */
+#home { min-height:100vh; display:flex; align-items:center; }
+.home-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; }
+
+.term-prefix { font-size:13px; color:var(--dim); margin-bottom:6px;
+  opacity:0; animation:fi .5s .4s forwards; }
+.home-name {
+  font-family:'VT323',monospace; font-size:68px; line-height:1;
+  color:var(--green); text-shadow:0 0 20px var(--green),0 0 60px rgba(0,255,65,0.2);
+  margin-bottom:6px;
+  opacity:0; animation:fi .5s .7s forwards, glitch 9s 2s infinite;
+}
+.home-sub {
+  font-size:14px; color:var(--amber); letter-spacing:4px;
+  text-transform:uppercase; margin-bottom:20px;
+  opacity:0; animation:fi .5s 1s forwards;
+}
+.home-obj {
+  font-size:13px; color:var(--soft); line-height:1.85;
+  max-width:500px; margin-bottom:30px;
+  opacity:0; animation:fi .5s 1.3s forwards;
+}
+.home-obj strong { color:var(--green); font-weight:normal; }
+.btn-row { display:flex; gap:14px; flex-wrap:wrap; opacity:0; animation:fi .5s 1.6s forwards; }
+
+/* Buttons */
+.btn {
+  display:inline-block; padding:9px 22px;
+  border:1px solid var(--green); color:var(--green);
+  text-decoration:none; font-family:'Share Tech Mono',monospace;
+  font-size:12px; letter-spacing:2px; text-transform:uppercase;
+  transition:all .2s; cursor:none; position:relative; overflow:hidden;
+}
+.btn::before { content:''; position:absolute; top:0;left:-100%;width:100%;height:100%;
+  background:var(--green); transition:left .2s; z-index:-1; }
+.btn:hover::before { left:0; }
+.btn:hover { color:var(--bg); }
+.btn-dim { border-color:var(--dim); color:var(--dim); }
+.btn-dim::before { background:var(--dim); }
+.btn-dim:hover { color:var(--bg); }
+.btn-amber { border-color:var(--amber); color:var(--amber); }
+.btn-amber::before { background:var(--amber); }
+.btn-amber:hover { color:var(--bg); }
+
+/* Donut panel */
+.donut-wrap {
+  display:flex; align-items:center; justify-content:center;
+}
+.donut-frame {
+  background:var(--panel); border:1px solid var(--border);
+  padding:24px 28px 16px; position:relative;
+}
+.donut-frame::before {
+  content:'SYSTEM_CORE // 3D RENDERER v2.4';
+  position:absolute; top:-10px; left:14px;
+  background:var(--bg); padding:0 8px;
+  font-size:10px; color:var(--amber); letter-spacing:2px;
+}
+#donut {
+  font-family:'Share Tech Mono',monospace; font-size:11.5px; line-height:1.2;
+  white-space:pre; color:var(--dim); display:block; letter-spacing:1px;
+}
+.donut-stat {
+  display:flex; justify-content:space-between;
+  border-top:1px solid var(--border); margin-top:8px; padding-top:6px;
+  font-size:10px; color:#004d14; letter-spacing:1px;
+}
+
+@keyframes fi { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+@keyframes glitch {
+  0%,93%,100%{text-shadow:0 0 20px var(--green),0 0 60px rgba(0,255,65,0.2);transform:none}
+  94%{text-shadow:-2px 0 var(--cyan),2px 0 var(--amber);transform:translate(-1px,0)}
+  95%{text-shadow:2px 0 var(--cyan),-2px 0 var(--amber);transform:translate(1px,0)}
+  96%{text-shadow:0 0 20px var(--green);transform:none}
+  97%{text-shadow:-2px 0 var(--amber);transform:translate(2px,1px)}
+  98%{text-shadow:0 0 20px var(--green);transform:none}
+}
+
+/* ── ABOUT ── */
+#about { background:linear-gradient(180deg,transparent,rgba(0,12,2,.4)); }
+.about-grid { display:grid; grid-template-columns:300px 1fr; gap:48px; align-items:start; }
+.id-panel { padding:28px; }
+.id-name { font-family:'VT323',monospace; font-size:34px; color:var(--green);
+  text-shadow:0 0 10px var(--green); margin-bottom:2px; }
+.id-role { font-size:11px; color:var(--amber); letter-spacing:3px; margin-bottom:24px; }
+.id-row { display:flex; gap:10px; font-size:12px; margin-bottom:9px;
+  padding-bottom:9px; border-bottom:1px solid rgba(0,255,65,0.05); }
+.id-k { color:var(--dim); font-size:10px; letter-spacing:1px; text-transform:uppercase; min-width:80px; padding-top:1px; }
+.id-v { color:var(--white); font-size:11px; line-height:1.5; }
+.id-v a { color:var(--cyan); text-decoration:none; }
+.id-v a:hover { text-shadow:0 0 8px var(--cyan); }
+
+.about-right {}
+.about-p { font-size:13px; color:var(--soft); line-height:1.9; margin-bottom:20px; }
+.about-p strong { color:var(--green); font-weight:normal; }
+
+/* Skills */
+.sk-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:28px; }
+.sk { border:1px solid var(--border); padding:13px 15px; position:relative;
+  overflow:hidden; transition:border-color .2s; }
+.sk:hover { border-color:rgba(0,255,65,.35); }
+.sk::after { content:''; position:absolute; bottom:0;left:0; height:2px;
+  background:var(--green); width:var(--lv); box-shadow:0 0 6px var(--green); }
+.sk-name { font-size:12px; color:var(--white); margin-bottom:3px; }
+.sk-sub { font-size:10px; color:var(--dim); letter-spacing:1px; }
+
+/* Edu panel */
+.edu-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:28px; }
+.edu { border:1px solid var(--border); padding:18px; position:relative; }
+.edu-badge { font-size:10px; color:var(--amber); letter-spacing:2px; margin-bottom:8px; }
+.edu-school { font-family:'VT323',monospace; font-size:24px; color:var(--green);
+  text-shadow:0 0 6px rgba(0,255,65,.3); line-height:1.1; margin-bottom:4px; }
+.edu-deg { font-size:11px; color:var(--soft); margin-bottom:4px; }
+.edu-gpa { font-size:11px; color:var(--amber); }
+.edu-courses { font-size:10px; color:var(--dim); margin-top:8px; line-height:1.6; }
+
+/* ── EXPERIENCE ── */
+#experience { background:rgba(0,8,1,.4); }
+.tl { position:relative; padding-left:36px; }
+.tl::before { content:''; position:absolute; left:0;top:0;bottom:0;
+  width:1px; background:linear-gradient(to bottom,var(--green),transparent); }
+.tl-item { position:relative; padding-bottom:44px; }
+.tl-dot { position:absolute; left:-41px; top:6px;
+  width:10px;height:10px; background:var(--green);
+  border:2px solid var(--bg); box-shadow:0 0 8px var(--green); }
+.tl-period { font-size:11px; color:var(--amber); letter-spacing:3px; margin-bottom:4px; }
+.tl-role { font-family:'VT323',monospace; font-size:32px; color:var(--green);
+  text-shadow:0 0 8px rgba(0,255,65,.3); line-height:1; margin-bottom:2px; }
+.tl-co { font-size:12px; color:var(--soft); letter-spacing:2px; margin-bottom:14px; }
+.tl-ul { list-style:none; }
+.tl-ul li { font-size:12px; color:#66aa66; line-height:1.75;
+  padding-left:16px; position:relative; margin-bottom:5px; }
+.tl-ul li::before { content:'▸ '; position:absolute; left:0; color:var(--green); }
+.tl-ul li strong { color:var(--soft); font-weight:normal; }
+
+/* ── PROJECTS ── */
+#projects {}
+.proj-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:20px; }
+.proj {
+  border:1px solid var(--border); background:var(--panel);
+  padding:26px; position:relative; overflow:hidden;
+  transition:border-color .3s, transform .2s;
+}
+.proj::before { content:''; position:absolute; top:0;left:0;right:0; height:2px;
+  background:linear-gradient(to right,transparent,var(--green),transparent);
+  opacity:0; transition:opacity .3s; }
+.proj:hover { border-color:rgba(0,255,65,.4); transform:translateY(-3px); }
+.proj:hover::before { opacity:1; }
+.proj-id { font-size:10px; color:var(--amber); letter-spacing:3px; margin-bottom:10px; }
+.proj-title { font-family:'VT323',monospace; font-size:26px; color:var(--green);
+  text-shadow:0 0 6px rgba(0,255,65,.25); margin-bottom:10px; line-height:1.1; }
+.proj-desc { font-size:12px; color:#77bb77; line-height:1.75; margin-bottom:16px; }
+.proj-highlights { list-style:none; margin-bottom:16px; }
+.proj-highlights li { font-size:11px; color:var(--dim); line-height:1.6;
+  padding-left:14px; position:relative; }
+.proj-highlights li::before { content:'→ '; position:absolute; left:0; color:var(--amber); }
+.tags { display:flex; flex-wrap:wrap; gap:6px; }
+.tag { font-size:10px; padding:2px 9px;
+  border:1px solid rgba(0,255,65,.18); color:var(--dim); letter-spacing:1px; text-transform:uppercase; }
+
+/* ── SKILLS SECTION ── */
+#skills { background:linear-gradient(180deg,rgba(0,8,1,.4),transparent); }
+.skills-big { display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; }
+.sk-cat { border:1px solid var(--border); background:var(--panel); padding:24px; }
+.sk-cat-title { font-family:'VT323',monospace; font-size:26px; color:var(--amber);
+  margin-bottom:16px; text-shadow:0 0 8px rgba(255,176,0,.3); }
+.sk-list { list-style:none; }
+.sk-list li { font-size:12px; color:var(--soft); padding:5px 0;
+  border-bottom:1px solid rgba(0,255,65,.05);
+  display:flex; align-items:center; gap:8px; }
+.sk-list li::before { content:'▸'; color:var(--green); font-size:10px; }
+
+/* ── CONTACT ── */
+#contact { min-height:auto; padding-bottom:60px; }
+.contact-grid { display:grid; grid-template-columns:1.1fr 1fr; gap:48px; align-items:start; }
+.term-box { border:1px solid var(--border); background:var(--panel); overflow:hidden; }
+.term-bar { background:rgba(0,255,65,.04); border-bottom:1px solid var(--border);
+  padding:8px 16px; display:flex; align-items:center; gap:8px;
+  font-size:11px; color:var(--dim); letter-spacing:2px; }
+.td { width:8px;height:8px;border-radius:50%; }
+.td-r{background:#ff5f56} .td-y{background:#ffbd2e} .td-g{background:#27c93f}
+.term-body { padding:22px; font-size:12px; line-height:2.1; }
+.t-line { display:flex; gap:8px; }
+.t-prompt { color:var(--amber); white-space:nowrap; }
+.t-out { color:var(--soft); padding-left:14px; }
+.t-link { color:var(--cyan); text-decoration:none; }
+.t-link:hover { text-shadow:0 0 8px var(--cyan); }
+.t-cursor { display:inline-block; width:8px; height:14px; background:var(--green);
+  vertical-align:middle; animation:cblink 1s step-end infinite; }
+.clinks { display:flex; flex-direction:column; gap:14px; }
+.clink {
+  display:flex; align-items:center; gap:16px;
+  padding:15px 18px; border:1px solid var(--border);
+  text-decoration:none; color:var(--dim); font-size:12px;
+  transition:all .2s; letter-spacing:1px; cursor:none;
+}
+.clink:hover { border-color:var(--green); color:var(--green);
+  text-shadow:0 0 8px var(--green); padding-left:26px; }
+.clink-icon { color:var(--amber); font-size:14px; min-width:32px; }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--border); padding:20px 48px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:11px; color:var(--dim); letter-spacing:2px; position:relative; z-index:1;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width:3px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--dark); }
+::-webkit-scrollbar-thumb:hover { background:var(--green); }
+
+/* Mobile */
+@media(max-width:900px) {
+  .home-grid,.about-grid,.contact-grid { grid-template-columns:1fr; }
+  .skills-big { grid-template-columns:1fr 1fr; }
+  .edu-grid,.sk-grid { grid-template-columns:1fr; }
+  nav ul { gap:14px; }
+  .home-name { font-size:52px; }
+  section { padding:100px 24px 60px; }
+  nav { padding:10px 24px; }
+}
+@media(max-width:600px) {
+  .skills-big { grid-template-columns:1fr; }
+  nav ul { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div class="bg-grid"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">PRG<em>_</em>RTL</div>
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="nav-ping">
+    <div class="ping-dot"></div>
+    TEMPE_AZ // ONLINE
+  </div>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+  <div class="container">
+    <div class="home-grid">
+      <div>
+        <div class="term-prefix">$ whoami --verbose</div>
+        <h1 class="home-name">PREETHAM<br>REDDY<br>GOUDELLY</h1>
+        <div class="home-sub">RTL Design Engineer</div>
+        <p class="home-obj">
+          <strong>M.S. Electrical Engineering @ ASU (GPA 3.88)</strong> — focused on
+          CPU architecture, microarchitecture, and RTL implementation.
+          Expert in <strong>SystemVerilog</strong>, <strong>UVM-based verification</strong>
+          of AXI/AMBA subsystems, CDC analysis, and FPGA prototyping of CPUs and accelerators.
+        </p>
+        <div class="btn-row">
+          <a href="#projects" class="btn">VIEW_PROJECTS</a>
+          <a href="#experience" class="btn btn-dim">EXPERIENCE</a>
+          <a href="/mnt/user-data/uploads/Preetham_Reddy_Goudelly_RTL_20260223.pdf" class="btn btn-amber" download>RESUME.PDF</a>
+        </div>
+      </div>
+
+      <div class="donut-wrap">
+        <div class="donut-frame">
+          <pre id="donut"></pre>
+          <div class="donut-stat">
+            <span id="fps">FPS:--</span>
+            <span>CORE: LOCAL</span>
+            <span id="fnum">Ø:0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="sh">
+      <div class="sh-label">PROFILE.DAT</div>
+      <h2 class="sh-title">ABOUT</h2>
+      <div class="sh-line"></div>
+    </div>
+    <div class="about-grid">
+      <div class="id-panel panel" data-lbl="// IDENTITY">
+        <div class="id-name">PREETHAM REDDY</div>
+        <div class="id-role">RTL / FPGA DESIGN ENGINEER</div>
+        <div class="id-row"><span class="id-k">LOCATION</span><span class="id-v">Tempe, AZ, USA</span></div>
+        <div class="id-row"><span class="id-k">EMAIL</span><span class="id-v"><a href="/cdn-cgi/l/email-protection#b2c2d5ddc7d6d7dedef2d3c1c79cd7d6c7"><span class="__cf_email__" data-cfemail="48382f273d2c2d242408293b3d662d2c3d">[email&#160;protected]</span></a></span></div>
+        <div class="id-row"><span class="id-k">PHONE</span><span class="id-v">(623) 383-0310</span></div>
+        <div class="id-row"><span class="id-k">LINKEDIN</span><span class="id-v"><a href="https://www.linkedin.com/in/preetham-reddy-goudelly" target="_blank">preetham-reddy-goudelly</a></span></div>
+        <div class="id-row"><span class="id-k">GITHUB</span><span class="id-v"><a href="https://github.com/Preetham-Reddy-007" target="_blank">Preetham-Reddy-007</a></span></div>
+        <div class="id-row"><span class="id-k">STATUS</span><span class="id-v" style="color:var(--green)">● OPEN TO WORK</span></div>
+
+        <div class="edu-grid" style="margin-top:24px">
+          <div class="edu" style="grid-column:1/-1">
+            <div class="edu-badge">GRAD // 2025</div>
+            <div class="edu-school">Arizona State University</div>
+            <div class="edu-deg">M.S. Electrical Engineering</div>
+            <div class="edu-gpa">GPA: 3.88 / 4.0</div>
+            <div class="edu-courses">VLSI Design · High-Speed I/O · Digital Verification · FPGA for ML · Advanced Computer Architecture</div>
+          </div>
+          <div class="edu" style="grid-column:1/-1">
+            <div class="edu-badge">UG // 2022</div>
+            <div class="edu-school">Ramaiah Institute of Technology</div>
+            <div class="edu-deg">B.E. Electronics & Communication Engineering</div>
+            <div class="edu-gpa">GPA: 3.8 / 4.0</div>
+            <div class="edu-courses">Digital Design · Computer Architecture · DSP · Machine Learning</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-right">
+        <p class="about-p">
+          I am an RTL Design Engineer with deep expertise in <strong>CPU architecture</strong>,
+          <strong>microarchitecture</strong>, and full-chip SoC integration. My work spans
+          SystemVerilog RTL design, UVM-based AXI/AMBA verification, CDC analysis,
+          and FPGA prototyping — from concept to timing-clean silicon.
+        </p>
+        <p class="about-p">
+          At <strong>Arizona State University</strong>, I develop SVA-based verification
+          for complex MUX arbitration logic and perform SerDes signal integrity analysis
+          using the MATLAB SerDes Toolbox. At <strong>IISc Bangalore</strong>, I built
+          complete UVM environments — drivers, monitors, scoreboards — for AHB-to-APB
+          AXI bridges, achieving over 85% verification coverage.
+        </p>
+        <p class="about-p">
+          I have taped out a <strong>GCN Accelerator RTL-to-GDSII</strong> at 575 MHz
+          (15% frequency improvement over baseline), designed 7nm FinFET SRAM arrays
+          with 9% area reduction, and implemented FPGA-accelerated Smart NIC prototypes
+          with deterministic 3-cycle packet lookup latency.
+        </p>
+
+        <div class="sk-grid">
+          <div class="sk" style="--lv:92%"><div class="sk-name">SystemVerilog / Verilog</div><div class="sk-sub">RTL DESIGN & VERIFICATION</div></div>
+          <div class="sk" style="--lv:88%"><div class="sk-name">UVM / Assertions (SVA)</div><div class="sk-sub">FUNCTIONAL VERIFICATION</div></div>
+          <div class="sk" style="--lv:85%"><div class="sk-name">AXI4 / AHB / APB</div><div class="sk-sub">BUS PROTOCOLS</div></div>
+          <div class="sk" style="--lv:82%"><div class="sk-name">CDC / Metastability</div><div class="sk-sub">CLOCK DOMAIN CROSSING</div></div>
+          <div class="sk" style="--lv:80%"><div class="sk-name">FPGA Prototyping</div><div class="sk-sub">VIVADO / ZYNQ</div></div>
+          <div class="sk" style="--lv:78%"><div class="sk-name">RTL-to-GDSII</div><div class="sk-sub">INNOVUS / DESIGN COMPILER</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="sh">
+      <div class="sh-label">WORK_LOG</div>
+      <h2 class="sh-title">EXPERIENCE</h2>
+      <div class="sh-line"></div>
+    </div>
+    <div class="tl">
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">FEB 2025 — DEC 2025</div>
+        <div class="tl-role">GRADUATE STUDENT ASSISTANT</div>
+        <div class="tl-co">ARIZONA STATE UNIVERSITY // TEMPE, AZ</div>
+        <ul class="tl-ul">
+          <li>Developed and integrated <strong>SystemVerilog Assertions (SVA)</strong> to verify 32:1 MUX arbitration logic; increased functional coverage to <strong>80%</strong> and debugged two critical corner cases</li>
+          <li>Simulated signal integrity for a <strong>4 GT/s UCIe serializer</strong> using MATLAB SerDes Toolbox; identified TX path timing margin issues and reported BER trends to the design team</li>
+          <li>Performed <strong>CDC analysis</strong> on SerDes control logic; implemented and verified <strong>2-FF synchronizers</strong> to mitigate metastability across asynchronous boundaries</li>
+        </ul>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">NOV 2022 — NOV 2023</div>
+        <div class="tl-role">HARDWARE DESIGN ENGINEER</div>
+        <div class="tl-co">INDIAN INSTITUTE OF SCIENCE (IISc) // BANGALORE, INDIA</div>
+        <ul class="tl-ul">
+          <li>Built complete <strong>UVM environment</strong> — drivers, monitors, scoreboards — for AHB-to-APB AXI bridge; constrained-random sequences uncovered protocol bugs, achieving <strong>&gt;85% coverage</strong></li>
+          <li>Used <strong>cocotb (Python) + Synopsys VCS</strong> to prototype tests and automate log parsing, reducing regression run times significantly</li>
+          <li>Implemented <strong>FPGA verification flow on Xilinx Zynq-7000</strong>; performed hardware-software co-simulation with ILA for real-time debugging, confirming RISC-V core integration</li>
+        </ul>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">JUL 2021 — MAR 2022</div>
+        <div class="tl-role">ENGINEERING INTERN</div>
+        <div class="tl-co">INDIAN SPACE RESEARCH ORGANIZATION (ISRO)</div>
+        <ul class="tl-ul">
+          <li>Designed synthesizable <strong>RTL for hyperspectral imaging pipeline</strong> on FPGA; documented microarchitectural specs, memory access patterns, and timing closure under tight area/power constraints</li>
+          <li>Integrated radiometric and spectral correction blocks, ensuring functional correctness across the full pipeline</li>
+        </ul>
+      </div>
+
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-period">JUL 2020 — MAR 2021</div>
+        <div class="tl-role">ENGINEERING INTERN</div>
+        <div class="tl-co">SAMSUNG R&D // BANGALORE, INDIA</div>
+        <ul class="tl-ul">
+          <li>Implemented a small-scale <strong>DNN model in synthesizable RTL</strong> for mobile device optimization research</li>
+          <li>Validated functional correctness via FPGA deployment and inference testing; gained RTL-to-FPGA design flow experience</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="container">
+    <div class="sh">
+      <div class="sh-label">REPO_INDEX</div>
+      <h2 class="sh-title">PROJECTS</h2>
+      <div class="sh-line"></div>
+    </div>
+    <div class="proj-grid">
+
+      <div class="proj">
+        <div class="proj-id">PRJ-001 // PHYSICAL DESIGN // 7nm FinFET</div>
+        <div class="proj-title">16×16 Register File with 6T SRAM Array</div>
+        <p class="proj-desc">Architected a 16-word × 16-bit register file using 6T SRAM cell topology optimized for low static power and high noise margin at advanced nodes.</p>
+        <ul class="proj-highlights">
+          <li><strong>9% area reduction</strong> vs baseline via modular, pitch-matched physical design in Cadence Virtuoso</li>
+          <li>Optimized 4:16 decoder balancing propagation delay vs transistor sizing for high-speed access</li>
+        </ul>
+        <div class="tags"><span class="tag">Cadence Virtuoso</span><span class="tag">6T SRAM</span><span class="tag">7nm FinFET</span><span class="tag">Physical Design</span></div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-id">PRJ-002 // RTL-TO-GDSII // 575 MHz</div>
+        <div class="proj-title">GCN Accelerator RTL-to-GDSII</div>
+        <p class="proj-desc">Designed and verified RTL for a Graph Convolutional Network accelerator, driving full RTL-to-GDSII implementation using ModelSim and Cadence Innovus.</p>
+        <ul class="proj-highlights">
+          <li>Met timing at <strong>575 MHz</strong> — <strong>15% clock frequency improvement</strong> over baseline design</li>
+          <li>PPA optimized: <strong>3.8 mW</strong> power, <strong>68% area utilization</strong> in 0.025 mm² footprint</li>
+        </ul>
+        <div class="tags"><span class="tag">ModelSim</span><span class="tag">Cadence Innovus</span><span class="tag">Calibre</span><span class="tag">PPA</span></div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-id">PRJ-003 // FPGA // TENSOR CORE</div>
+        <div class="proj-title">Custom Tensor Accelerator Core</div>
+        <p class="proj-desc">Designed a Tensor Core Accelerator with parallel 8-bit MAC data path and FSM control logic managing a 5-cycle sequential pipeline.</p>
+        <ul class="proj-highlights">
+          <li>Engineered FSM for Read→MAC→Write pipeline with precise command sequencing</li>
+          <li>Parameterized RTL supports variable 3×3 to 6×6 transform matrices with 256×256 I/O</li>
+        </ul>
+        <div class="tags"><span class="tag">Verilog RTL</span><span class="tag">Xilinx FPGA</span><span class="tag">FSM</span><span class="tag">Vivado</span></div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-id">PRJ-004 // VERIFICATION // ROUTER</div>
+        <div class="proj-title">1×3 Packet-Based Router Design</div>
+        <p class="proj-desc">Designed and verified a 1×3 packet router with constrained-random testbenches, achieving functional coverage across all sub-modules and top-level integration.</p>
+        <ul class="proj-highlights">
+          <li>Verified 8-state control FSM with busy stalls, back-to-back packets, XOR parity logic</li>
+          <li>FIFO timeout testing confirmed soft-reset generation and HiZ on data-out after 30 cycles</li>
+        </ul>
+        <div class="tags"><span class="tag">Verilog</span><span class="tag">Xilinx FPGA</span><span class="tag">Constrained Random</span><span class="tag">Vivado</span></div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-id">PRJ-005 // SMART NIC // AXI-LITE</div>
+        <div class="proj-title">FPGA-Accelerated Smart NIC Prototype</div>
+        <p class="proj-desc">Hardware packet filtering engine (TCAM-equivalent) in Verilog RTL with fixed 3-cycle deterministic lookup latency for firewall offloading.</p>
+        <ul class="proj-highlights">
+          <li><strong>3-cycle deterministic lookup</strong> via registered parallel memory comparisons</li>
+          <li>Reusable AXI-Lite Slave IP Core with 6-register H/S interface for MicroBlaze integration</li>
+        </ul>
+        <div class="tags"><span class="tag">Verilog</span><span class="tag">MicroBlaze</span><span class="tag">AXI-Lite</span><span class="tag">Smart NIC</span></div>
+      </div>
+
+      <div class="proj">
+        <div class="proj-id">PRJ-006 // SERDES // UCIe</div>
+        <div class="proj-title">UCIe SerDes Signal Integrity Analysis</div>
+        <p class="proj-desc">Signal integrity simulation for a 4 GT/s UCIe serializer using MATLAB SerDes Toolbox, analyzing jitter, crosstalk, and BER impacts on TX path timing margins.</p>
+        <ul class="proj-highlights">
+          <li>Identified critical timing margin issues in TX path; reported BER trends to design team</li>
+          <li>CDC analysis + 2-FF synchronizer implementation for SerDes control logic</li>
+        </ul>
+        <div class="tags"><span class="tag">UCIe</span><span class="tag">SerDes</span><span class="tag">MATLAB</span><span class="tag">Signal Integrity</span></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="sh">
+      <div class="sh-label">CAPABILITY_MATRIX</div>
+      <h2 class="sh-title">SKILLS</h2>
+      <div class="sh-line"></div>
+    </div>
+    <div class="skills-big">
+      <div class="sk-cat">
+        <div class="sk-cat-title">CORE COMPETENCIES</div>
+        <ul class="sk-list">
+          <li>CPU Architecture & Microarchitecture</li>
+          <li>RTL Design & Implementation</li>
+          <li>UVM-Based Functional Verification</li>
+          <li>Clock Domain Crossing (CDC)</li>
+          <li>Coherency Protocols</li>
+          <li>IP Integration & Subsystems</li>
+          <li>Verification Planning</li>
+          <li>FPGA Prototyping</li>
+        </ul>
+      </div>
+      <div class="sk-cat">
+        <div class="sk-cat-title">LANGUAGES & EDA</div>
+        <ul class="sk-list">
+          <li>SystemVerilog / Verilog</li>
+          <li>C / C++ / Python / TCL</li>
+          <li>Synopsys VCS + Verdi</li>
+          <li>Cadence Innovus + Virtuoso</li>
+          <li>Design Compiler (DC)</li>
+          <li>Siemens ModelSim</li>
+          <li>Ansys HFSS / HSpice</li>
+          <li>Xilinx Vivado</li>
+        </ul>
+      </div>
+      <div class="sk-cat">
+        <div class="sk-cat-title">ARCH & PROTOCOLS</div>
+        <ul class="sk-list">
+          <li>AXI4 / AHB / APB</li>
+          <li>RISC-V ISA & Subsystem</li>
+          <li>PCIe / UCIe</li>
+          <li>TCP/IP Networking</li>
+          <li>SerDes / High-Speed I/O</li>
+          <li>AMBA Bus Architecture</li>
+          <li>cocotb (Python)</li>
+          <li>Git / Version Control</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="sh">
+      <div class="sh-label">COMMS_LINK</div>
+      <h2 class="sh-title">CONTACT</h2>
+      <div class="sh-line"></div>
+    </div>
+    <div class="contact-grid">
+      <div class="term-box">
+        <div class="term-bar">
+          <div class="td td-r"></div><div class="td td-y"></div><div class="td td-g"></div>
+          <span style="margin-left:8px">COMMS_TERMINAL // <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="770710180213121b1b3716040259121302">[email&#160;protected]</a></span>
+        </div>
+        <div class="term-body">
+          <div class="t-line"><span class="t-prompt">prg@rtl:~$</span><span style="color:var(--green)"> cat identity.txt</span></div>
+          <div class="t-out">NAME: Preetham Reddy Goudelly</div>
+          <div class="t-out">ROLE: RTL Design Engineer</div>
+          <div class="t-out">LOC : Tempe, AZ, USA</div>
+          <br>
+          <div class="t-line"><span class="t-prompt">prg@rtl:~$</span><span style="color:var(--green)"> ping linkedin.com</span></div>
+          <div class="t-out">→ <a class="t-link" href="https://www.linkedin.com/in/preetham-reddy-goudelly" target="_blank">linkedin.com/in/preetham-reddy-goudelly</a></div>
+          <br>
+          <div class="t-line"><span class="t-prompt">prg@rtl:~$</span><span style="color:var(--green)"> ping github.com</span></div>
+          <div class="t-out">→ <a class="t-link" href="https://github.com/Preetham-Reddy-007" target="_blank">github.com/Preetham-Reddy-007</a></div>
+          <br>
+          <div class="t-line"><span class="t-prompt">prg@rtl:~$</span><span style="color:var(--green)"> mail <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6f1f08001a0b0a03032f0e1c1a410a0b1a">[email&#160;protected]</a></span></div>
+          <div class="t-out">→ <a class="t-link" href="/cdn-cgi/l/email-protection#83f3e4ecf6e7e6efefc3e2f0f6ade6e7f6"><span class="__cf_email__" data-cfemail="c2b2a5adb7a6a7aeae82a3b1b7eca7a6b7">[email&#160;protected]</span></a></div>
+          <br>
+          <div class="t-line"><span class="t-prompt">prg@rtl:~$</span><span style="color:var(--green)"> <span id="typed"></span><span class="t-cursor"></span></span></div>
+        </div>
+      </div>
+      <div>
+        <div class="sh-label" style="margin-bottom:20px">CHANNELS</div>
+        <div class="clinks">
+          <a class="clink" href="/cdn-cgi/l/email-protection#5b2b3c342e3f3e37371b3a282e753e3f2e">
+            <span class="clink-icon">[ML]</span> <span class="__cf_email__" data-cfemail="e090878f9584858c8ca0819395ce858495">[email&#160;protected]</span>
+          </a>
+          <a class="clink" href="tel:6233830310">
+            <span class="clink-icon">[PH]</span> (623) 383-0310
+          </a>
+          <a class="clink" href="https://www.linkedin.com/in/preetham-reddy-goudelly" target="_blank">
+            <span class="clink-icon">[LI]</span> linkedin.com/in/preetham-reddy-goudelly
+          </a>
+          <a class="clink" href="https://github.com/Preetham-Reddy-007" target="_blank">
+            <span class="clink-icon">[GH]</span> github.com/Preetham-Reddy-007
+          </a>
+          <a class="clink" href="/mnt/user-data/uploads/Preetham_Reddy_Goudelly_RTL_20260223.pdf" download class="btn btn-amber" style="margin-top:8px;justify-content:center;letter-spacing:2px">
+            ↓ DOWNLOAD RESUME
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 PREETHAM_REDDY_GOUDELLY</span>
+  <span>RTL · FPGA · CPU_ARCH · SoC</span>
+  <span id="clk"></span>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
+});
+
+// ── CLOCK ──
+const clkEl = document.getElementById('clk');
+function tick() {
+  const n = new Date();
+  clkEl.textContent = n.toISOString().replace('T',' ').slice(0,19) + ' UTC';
+}
+setInterval(tick, 1000); tick();
+
+// ── SPINNING DONUT ──
+(function(){
+  const el = document.getElementById('donut');
+  const W=42, H=24;
+  let A=0, B=0, frames=0, last=performance.now();
+  const chars = '@#$*!;:-,. ';
+
+  function frame(){
+    const out = new Array(W*H).fill(' ');
+    const z   = new Array(W*H).fill(0);
+    const sinA=Math.sin(A),cosA=Math.cos(A),sinB=Math.sin(B),cosB=Math.cos(B);
+
+    for(let j=0;j<6.28;j+=0.08){
+      const cj=Math.cos(j),sj=Math.sin(j);
+      for(let i=0;i<6.28;i+=0.025){
+        const si=Math.sin(i),ci=Math.cos(i);
+        const h=cj+2, D=1/(si*h*sinA+sj*cosA+5);
+        const t=si*h*cosA-sj*sinA;
+        const x=Math.floor(W/2+17*D*(ci*h*cosB-t*sinB));
+        const y=Math.floor(H/2+9*D*(ci*h*sinB+t*cosB));
+        const o=x+W*y;
+        const L=Math.floor(8*((sj*sinA-si*cj*cosA)*cosB-si*cj*sinA-sj*cosA-ci*cj*sinB));
+        if(H>y&&y>0&&x>0&&W>x&&D>z[o]){z[o]=D;out[o]=chars[L>0?L:0];}
+      }
+    }
+    let r='';
+    for(let i=0;i<H;i++) r+=out.slice(i*W,(i+1)*W).join('')+'\n';
+    el.textContent=r;
+    A+=0.05; B+=0.025; frames++;
+    const now=performance.now();
+    if(now-last>1000){
+      document.getElementById('fps').textContent='FPS:'+frames;
+      document.getElementById('fnum').textContent='Ø:'+frames;
+      frames=0; last=now;
+    }
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+// ── TYPED COMMANDS ──
+const cmds = ['synthesize top.sv', 'run_sim --uvm', 'check_cdc -lint', 'impl_design 
