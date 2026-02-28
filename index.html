@@ -40,8 +40,9 @@ body {
   pointer-events: none;
   z-index: 9999;
   animation: cblink 1s step-end infinite;
-  mix-blend-mode: screen;
-  transform: translate(-2px,-2px);
+  /* NEW - replace those 2 lines with: */
+  box-shadow: 0 0 6px var(--green);
+  top: 0; left: 0;
 }
 @keyframes cblink { 0%,100%{opacity:1} 50%{opacity:0} }
 
@@ -739,6 +740,9 @@ document.addEventListener('mousemove', e => {
   cur.style.left = e.clientX + 'px';
   cur.style.top  = e.clientY + 'px';
 });
+
+document.addEventListener('mouseleave', () => { cur.style.opacity = '0'; });
+document.addEventListener('mouseenter', () => { cur.style.opacity = '1'; });
 
 // ── CLOCK ──
 const clkEl = document.getElementById('clk');
